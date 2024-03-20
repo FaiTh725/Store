@@ -10,7 +10,6 @@ namespace Store.Model
 {
     public class Avatar
     {
-        [Key]
         public int Id { get; set; }
 
         public string? PathAvatar {  get; set; }

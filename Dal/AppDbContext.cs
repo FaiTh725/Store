@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Store.Dal
 {
     public class AppDbContext : DbContext
     {
-        protected const string jsonPath = "~appsetting.json";
+        protected const string jsonPath = "appsettings.json";
 
         public DbSet<Product> Products { get; set; }
 
@@ -27,9 +28,19 @@ namespace Store.Dal
         {
             var file = File.ReadAllText(jsonPath);
 
-            var connectionString = JsonConvert.DeserializeObject<string>("Default");
+            AppConfig appConfig = JsonConvert.DeserializeObject<AppConfig>(file);
 
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(appConfig.ConnectionStrings.Default);
         }
+    }
+
+    public class ConnectionStringsConfig
+    {
+        public string Default { get; set; }
+    }
+
+    public class AppConfig
+    {
+        public ConnectionStringsConfig ConnectionStrings { get; set; }
     }
 }
