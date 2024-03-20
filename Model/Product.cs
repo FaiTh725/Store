@@ -24,5 +24,9 @@ namespace Store.Model
         public string? ShortDescription { get; set; }
 
         public double Price { get; set; }
+
+        public int AvatarId { get; set; }
+
+        public Avatar? Avatar { get; set; }
     }
 }
