@@ -10,6 +10,7 @@ namespace Store.Model
 {
     public class Product
     {
+        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -20,8 +21,6 @@ namespace Store.Model
 
         public double Price { get; set; }
 
-        public int AvatarId { get; set; }
-
-        public Avatar? Avatar { get; set; }
+        public string Path { get; set; }
     }
 }

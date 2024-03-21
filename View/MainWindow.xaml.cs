@@ -23,5 +23,25 @@ namespace Store.View
         {
             InitializeComponent();
         }
+
+        private void ColumnDefinition_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(Application.Current.MainWindow.WindowState == WindowState.Normal)
+            {
+                maximizeImg.Source = new BitmapImage(new Uri("\\View\\Images\\Head\\Normalize.png", UriKind.Relative));
+            }
+            else
+            {
+                maximizeImg.Source = new BitmapImage(new Uri("\\View\\Images\\Head\\Maximize.png", UriKind.Relative));
+            }
+        }
     }
 }

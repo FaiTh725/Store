@@ -11,7 +11,7 @@ using Store.Dal;
 namespace Store.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240320145124_initial")]
+    [Migration("20240321172308_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -24,22 +24,6 @@ namespace Store.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Store.Model.Avatar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("PathAvatar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Avatars");
-                });
-
             modelBuilder.Entity("Store.Model.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -48,13 +32,14 @@ namespace Store.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AvatarId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -66,20 +51,7 @@ namespace Store.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AvatarId");
-
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Store.Model.Product", b =>
-                {
-                    b.HasOne("Store.Model.Avatar", "Avatar")
-                        .WithMany()
-                        .HasForeignKey("AvatarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Avatar");
                 });
 #pragma warning restore 612, 618
         }

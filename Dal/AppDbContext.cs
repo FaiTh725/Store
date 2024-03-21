@@ -17,8 +17,6 @@ namespace Store.Dal
 
         public DbSet<Product> Products { get; set; }
 
-        public DbSet<Avatar> Avatars { get; set; }
-
         public AppDbContext()
         {
             Database.EnsureCreated();
@@ -26,11 +24,11 @@ namespace Store.Dal
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var file = File.ReadAllText(jsonPath);
+            /*var file = File.ReadAllText(jsonPath);
 
-            AppConfig appConfig = JsonConvert.DeserializeObject<AppConfig>(file);
+            AppConfig appConfig = JsonConvert.DeserializeObject<AppConfig>(file);*/
 
-            optionsBuilder.UseSqlServer(appConfig.ConnectionStrings.Default);
+            optionsBuilder.UseSqlServer("Server=FaiTh;Database=ProductStore;Trusted_Connection=True;TrustServerCertificate=True");
         }
     }
 

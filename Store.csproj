@@ -9,8 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="View\Images\" />
-    <Folder Include="View\UserControl\" />
+    <None Remove="appsettings.json" />
+    <None Remove="View\Images\DefaultImg.png" />
+    <None Remove="View\Images\Head\Close.png" />
+    <None Remove="View\Images\Head\Maximize.png" />
+    <None Remove="View\Images\Head\Minimize.png" />
+    <None Remove="View\Images\Head\Nomalize.png" />
+    <None Remove="View\Images\Head\Normalize.png" />
+    <None Remove="View\Images\Head\product.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Files\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +31,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="appsettings.json" />
+    <Resource Include="View\Images\DefaultImg.png" />
+    <Resource Include="View\Images\Head\Close.png" />
+    <Resource Include="View\Images\Head\Maximize.png" />
+    <Resource Include="View\Images\Head\Minimize.png" />
+    <Resource Include="View\Images\Head\Normalize.png" />
+    <Resource Include="View\Images\Head\product.png" />
   </ItemGroup>
 
 </Project>
