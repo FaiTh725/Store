@@ -32,7 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="appsettings.json" />
+    <Resource Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="View\Images\DefaultImg.png" />
     <Resource Include="View\Images\Head\Close.png" />
     <Resource Include="View\Images\Head\Maximize.png" />

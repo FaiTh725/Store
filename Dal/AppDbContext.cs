@@ -8,12 +8,13 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Store.Dal
 {
     public class AppDbContext : DbContext
     {
-        protected const string jsonPath = "appsettings.json";
+        protected const string jsonName = "appsettings.json";
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
@@ -25,21 +26,12 @@ namespace Store.Dal
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            /*var file = File.ReadAllText(jsonPath);
+            var json = File.ReadAllText(jsonName);
 
-            AppConfig appConfig = JsonConvert.DeserializeObject<AppConfig>(file);*/
+            AppConfig appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
 
-            optionsBuilder.UseSqlServer("Server=FaiTh;Database=ProductStore;Trusted_Connection=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer(appConfig.ConnectionString);
+            //optionsBuilder.UseSqlServer("Server=FaiTh;Database=ProductStore;Trusted_Connection=True;TrustServerCertificate=True");
         }
-    }
-
-    public class ConnectionStringsConfig
-    {
-        public string Default { get; set; }
-    }
-
-    public class AppConfig
-    {
-        public ConnectionStringsConfig ConnectionStrings { get; set; }
     }
 }
