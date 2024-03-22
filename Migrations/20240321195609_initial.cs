@@ -11,6 +11,20 @@ namespace Store.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ImageFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageFiles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -20,12 +34,23 @@ namespace Store.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ImageFileId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_ImageFiles_ImageFileId",
+                        column: x => x.ImageFileId,
+                        principalTable: "ImageFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ImageFileId",
+                table: "Products",
+                column: "ImageFileId");
         }
 
         /// <inheritdoc />
@@ -33,6 +58,9 @@ namespace Store.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "ImageFiles");
         }
     }
 }

@@ -21,6 +21,27 @@ namespace Store.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Store.Model.ImageFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImageFiles");
+                });
+
             modelBuilder.Entity("Store.Model.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -32,11 +53,10 @@ namespace Store.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ImageFileId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -48,7 +68,20 @@ namespace Store.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ImageFileId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Store.Model.Product", b =>
+                {
+                    b.HasOne("Store.Model.ImageFile", "ImageFile")
+                        .WithMany()
+                        .HasForeignKey("ImageFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ImageFile");
                 });
 #pragma warning restore 612, 618
         }

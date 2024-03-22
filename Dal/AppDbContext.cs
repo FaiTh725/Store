@@ -16,6 +16,7 @@ namespace Store.Dal
         protected const string jsonPath = "appsettings.json";
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ImageFile> ImageFiles { get; set; }
 
         public AppDbContext()
         {

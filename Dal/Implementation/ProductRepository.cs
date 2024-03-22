@@ -55,6 +55,16 @@ namespace Store.Dal.Implementation
             }
         }
 
+        public async Task<byte[]> GetDefaultImage()
+        {
+            using (AppDbContext context = new())
+            {
+                var imageFile = await context.ImageFiles.FirstOrDefaultAsync(x => x.FileName == "DefaultImg.png");
+
+                return imageFile.ImageData;
+            }
+        }
+
         public Task<bool> Update()
         {
             throw new NotImplementedException();

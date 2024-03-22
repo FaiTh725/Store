@@ -1,14 +1,19 @@
-﻿using Store.Dal.Implementation;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Win32;
+using Store.Dal.Implementation;
 using Store.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace Store.ViewModel
 {
@@ -71,6 +76,20 @@ namespace Store.ViewModel
             }
         }
 
+        private const string DefaultPath = @"\View\Images\DefaultImg.png";
+        private string path;
+        public string Path
+        {
+            get => path;
+            set
+            {
+                path = value;
+                OnPropertyChanged(nameof(Path));
+            }
+        }
+
+        private ImageFile imageFile;
+
         private ProductRepository repository;
 
         #endregion
@@ -78,16 +97,57 @@ namespace Store.ViewModel
         public BaseViewModel()
         {
             repository = new();
+
+            Path = DefaultPath;
+            /*imageFile = new ImageFile()
+            {
+                FileName = "Default",
+                ImageData = File.ReadAllBytes(Path[1..])
+            };*/
         }
 
         private void ClearFields()
         {
             Name = Description = ShortDescription = string.Empty;
             price = 0.0;
+        }
 
+        private Image ByArrayToImage(byte[] data)
+        {
+            using (var stream = new MemoryStream(data))
+            {
+                return Image.FromStream(stream);
+            }
         }
 
         #region Commands
+        private RelayCommand uploadFileCommand;
+        public RelayCommand UploadFileCommand
+        {
+            get
+            {
+                return uploadFileCommand ?? new RelayCommand(obj =>
+                {   
+                    OpenFileDialog dialog = new OpenFileDialog();
+
+                    dialog.Filter = "Изображения (*.png) | *.png";
+                    dialog.Title = "Выберите фото товара";
+                    bool? result = dialog.ShowDialog();
+
+                    if (result == true)
+                    {
+                        Path = dialog.FileName;
+
+                        imageFile = new ImageFile()
+                        {
+                            FileName = dialog.SafeFileName,
+                            ImageData = File.ReadAllBytes(dialog.FileName)
+                        };
+                    }
+                });
+            }
+        }
+
         private RelayCommand addProductCommand;
         public RelayCommand AddProductCommand
         {
@@ -97,24 +157,47 @@ namespace Store.ViewModel
                 {
                     Error = string.Empty;
 
+                    if (Name == string.Empty)
+                    {
+                        Error = "Поле имя пустое";
+                        return;
+                    }
+                    if(Price < 0)
+                    {
+                        Error = "Cумма отрицательная";
+                        return;
+                    }
+
                     var product = new Product()
                     {
                         Name = this.Name,
                         Description = this.Description,
                         ShortDescription = this.ShortDescription,
                         Price = this.Price,
-                        Path = "12"
+                        ImageFile = imageFile ?? new ImageFile()
+                        {
+                            FileName = "Default",
+                            ImageData = await repository.GetDefaultImage()
+                        }
                     };
 
                     var response = await repository.Create(product);
 
-                    if(!response)
+                    if (!response)
                     {
-                        Error = "Неверные данные";
+                        Error = "Данный товар уже добавлен";
                         return;
                     }
-
-
+                    else
+                    {
+                        ClearFields();
+                        Path = DefaultPath;
+                        imageFile = new ImageFile()
+                        {
+                            FileName = "Default",
+                            ImageData = await repository.GetDefaultImage()
+                        };
+                    }
                 });
             }
         }

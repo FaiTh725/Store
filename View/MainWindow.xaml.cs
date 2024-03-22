@@ -43,5 +43,27 @@ namespace Store.View
                 maximizeImg.Source = new BitmapImage(new Uri("\\View\\Images\\Head\\Maximize.png", UriKind.Relative));
             }
         }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is RadioButton btn && btn.Content is string content)
+            {
+                if(content == "Главная")
+                {
+                    AddProduct.Visibility = Visibility.Hidden;
+                    About.Visibility = Visibility.Hidden;
+                }
+                else if(content == "Добавить")
+                {
+                    AddProduct.Visibility = Visibility.Visible;
+                    About.Visibility = Visibility.Hidden;
+                }
+                else if(content == "Сведения")
+                {
+                    About.Visibility = Visibility.Visible;
+                    AddProduct.Visibility = Visibility.Hidden;   
+                }
+            }
+        }
     }
 }

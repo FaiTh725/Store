@@ -79,14 +79,24 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
 
-                    <RadioButton GroupName="aside" Style="{StaticResource ASideRButton}">Главная</RadioButton>
-                    <RadioButton GroupName="aside" Style="{StaticResource ASideRButton}" Grid.Row="1">Добавить</RadioButton>
-                    <RadioButton GroupName="aside" Style="{StaticResource ASideRButton}" Grid.Row="3">Сведения</RadioButton>
+                    <RadioButton IsChecked="True" Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}">Главная</RadioButton>
+                    <RadioButton Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}" Grid.Row="1">Добавить</RadioButton>
+                    <RadioButton Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}" Grid.Row="3">Сведения</RadioButton>
                 
                 </Grid>
             </Border>
 
-            <Grid Grid.Column="1">
+            <TextBlock x:Name="About" Grid.Column="1"
+                       Style="{StaticResource BaseTextBlock}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Padding="20 30"
+                       FontSize="16"
+                       Visibility="Hidden">
+                Программу разработал студент 1 курса ХХХХХХХХХХХХХХХХ гр.УУУУУУУУУУУ
+            </TextBlock>
+            
+            <Grid x:Name="AddProduct" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="300"/>
                     <RowDefinition/>
@@ -99,7 +109,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Source="\View\Images\DefaultImg.png" Margin="30"/>
+                    <Image Source="{Binding Path}" Margin="30"/>
 
                     <StackPanel Grid.Column="1">
                         <uc:InputArea Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Description="Название"/>
@@ -107,7 +117,12 @@
                         <uc:InputArea Value="{Binding ShortDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Description="Краткое описание"/>
 
                         <Button Style="{StaticResource TemplateButton}"
-                                HorizontalAlignment="Left" Margin="10 20">Загрузить фото товара</Button>
+                                HorizontalAlignment="Left" Margin="10 20"
+                                FontSize="16"
+                                Padding="10"
+                                Height="60"
+                                Width="200"
+                                Command="{Binding UploadFileCommand}">Загрузить фото товара</Button>
                         
                         <TextBlock Text="{Binding Error}" Margin="20 40 0 0" FontSize="16" Foreground="#ed4e42"></TextBlock>
                     </StackPanel>

@@ -16,5 +16,7 @@ namespace Store.Dal.Interfaces
         public Task<bool> Delete(Product product);
 
         public Task<bool> Update();
+
+        public Task<byte[]> GetDefaultImage();
     }
 }

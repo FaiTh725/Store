@@ -21,6 +21,9 @@ namespace Store.Model
 
         public double Price { get; set; }
 
-        public string Path { get; set; }
+        public int ImageFileId { get; set; }
+
+        [ForeignKey("ImageFileId")]
+        public ImageFile ImageFile { get; set; }    
     }
 }
