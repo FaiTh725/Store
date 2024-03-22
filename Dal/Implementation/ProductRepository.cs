@@ -42,16 +42,32 @@ namespace Store.Dal.Implementation
                 }
 
                 context.Products.Remove(pr);
+                await context.SaveChangesAsync();
 
                 return true;
             }
         }
 
-        public async Task<IQueryable<Product>> GetAll()
+        public List<Product> GetAll()
         {
             using (AppDbContext context = new())
             {
-                return context.Products;
+                return context.Products.Include(x => x.ImageFile).ToList();
+            }
+        }
+
+        public async Task<IEnumerable<Product>> GetByName(string name)
+        {
+            using (AppDbContext context = new())
+            {
+                var pr = await context.Products.Include(c => c.ImageFile).Where(x => x.Name == name).ToListAsync();
+
+                if(pr == null)
+                {
+                    return new List<Product>();
+                }
+
+                return pr;
             }
         }
 
@@ -65,9 +81,23 @@ namespace Store.Dal.Implementation
             }
         }
 
-        public Task<bool> Update()
+        public async Task<bool> Update(Product product)
         {
-            throw new NotImplementedException();
+            using (AppDbContext context = new())
+            {
+                try
+                {
+                    context.Update(product);
+
+                    await context.SaveChangesAsync();
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
     }
 }

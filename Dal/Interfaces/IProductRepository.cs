@@ -11,12 +11,14 @@ namespace Store.Dal.Interfaces
     {
         public Task<bool> Create(Product product);
 
-        public Task<IQueryable<Product>> GetAll();
+        public List<Product> GetAll();
 
         public Task<bool> Delete(Product product);
 
-        public Task<bool> Update();
+        public Task<bool> Update(Product product);
 
         public Task<byte[]> GetDefaultImage();
+
+        public Task<IEnumerable<Product>> GetByName(string name);
     }
 }

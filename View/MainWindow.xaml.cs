@@ -50,20 +50,52 @@ namespace Store.View
             {
                 if(content == "Главная")
                 {
+                    Main.Visibility = Visibility.Visible;
                     AddProduct.Visibility = Visibility.Hidden;
                     About.Visibility = Visibility.Hidden;
+                    RedactProduct.Visibility = Visibility.Hidden;
                 }
                 else if(content == "Добавить")
                 {
                     AddProduct.Visibility = Visibility.Visible;
                     About.Visibility = Visibility.Hidden;
+                    Main.Visibility = Visibility.Hidden;
+                    RedactProduct.Visibility = Visibility.Hidden;
                 }
                 else if(content == "Сведения")
                 {
                     About.Visibility = Visibility.Visible;
-                    AddProduct.Visibility = Visibility.Hidden;   
+                    AddProduct.Visibility = Visibility.Hidden;
+                    Main.Visibility = Visibility.Hidden;
+                    RedactProduct.Visibility = Visibility.Hidden;
                 }
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if(baseViewModel.SelectedProduct != null)
+            {
+                About.Visibility = Visibility.Hidden;
+                AddProduct.Visibility = Visibility.Hidden;
+                Main.Visibility = Visibility.Hidden;
+
+                RedactProduct.Visibility = Visibility.Visible;
+
+                rBtnMain.IsChecked = false;
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Main.Visibility = Visibility.Visible;
+            RedactProduct.Visibility = Visibility.Hidden;
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            Main.Visibility = Visibility.Visible;
+            RedactProduct.Visibility = Visibility.Hidden;
         }
     }
 }

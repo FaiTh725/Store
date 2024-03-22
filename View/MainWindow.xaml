@@ -13,6 +13,7 @@
         <vm:BaseViewModel x:Name="baseViewModel"/>
     </Window.DataContext>
 
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -79,10 +80,10 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
 
-                    <RadioButton IsChecked="True" Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}">Главная</RadioButton>
+                    <RadioButton x:Name="rBtnMain" IsChecked="True" Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}">Главная</RadioButton>
                     <RadioButton Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}" Grid.Row="1">Добавить</RadioButton>
                     <RadioButton Click="RadioButton_Click" GroupName="aside" Style="{StaticResource ASideRButton}" Grid.Row="3">Сведения</RadioButton>
-                
+                    
                 </Grid>
             </Border>
 
@@ -95,8 +96,84 @@
                        Visibility="Hidden">
                 Программу разработал студент 1 курса ХХХХХХХХХХХХХХХХ гр.УУУУУУУУУУУ
             </TextBlock>
+
+            <Grid x:Name="Main" Visibility="Visible" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="70"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Image Source="\View\Images\search.png" Width="60" Height="60"/>
+                    <Border Margin="20 0" BorderBrush="#17C959" BorderThickness="2" Height="50" CornerRadius="13">
+                        <TextBox Text="{Binding SearchString}" Style="{StaticResource test}" Height="40" Width="400"
+                             FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></TextBox>
+                    </Border>
+                    <Button Command="{Binding SearchCommand}" Style="{StaticResource TemplateButton}" Height="40" Width="80">Поиск</Button>
+                    <Button Command="{Binding RefreshComamnd}" Style="{StaticResource RefreshBtn}" Height="40" Width="40" Margin="20 0 0 0">
+                        <Image Source="\View\Images\refresh.png"/>
+                    </Button>
+                    
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource ListTextBlock}">Фото</TextBlock>
+                    <TextBlock Style="{StaticResource ListTextBlock}" Grid.Column="1">Название</TextBlock>
+                    <TextBlock Style="{StaticResource ListTextBlock}" Grid.Column="2">Цена</TextBlock>
+                    <TextBlock Style="{StaticResource ListTextBlock}" Grid.Column="3">Краткое описание</TextBlock>
+                </Grid>
+
+                <ListBox Style="{StaticResource LstProducts}" Grid.Row="2" 
+                         ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border>
+                                <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Image Source="{Binding ImageFile.Img}" Width="50" Height="50"/>
+                                    <TextBlock Style="{StaticResource ListTextBlock}" Grid.Column="1" Text="{Binding Name}"/>
+                                    <TextBlock Style="{StaticResource ListTextBlock}" Grid.Column="2" Text="{Binding Price}"/>
+                                    <TextBlock Style="{StaticResource ListTextBlock}" Grid.Column="3" Text="{Binding ShortDescription}"/>
+                                </Grid>
+                            </Border>
+                            
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    
+                </ListBox>
+
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="140"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Command="{Binding DeleteteProductCommand}"
+                        Style="{StaticResource ListBoxBtn}" Grid.Column="1">Удалить</Button>
+                    <Button Style="{StaticResource ListBoxBtn}" 
+                            Click="Button_Click_1"
+                            Background="#2aa7f5" Grid.Column="2">Редактировать</Button>
+                </Grid>
+            </Grid>
             
-            <Grid x:Name="AddProduct" Grid.Column="1">
+            <Grid x:Name="AddProduct" Visibility="Hidden" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="300"/>
                     <RowDefinition/>
@@ -145,7 +222,68 @@
                     FontSize="16"
                     Width="130" Height="60" Grid.Row="2">Добавить</Button>
             </Grid>
-            
+
+            <Grid x:Name="RedactProduct" Visibility="Hidden" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="230"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="100"/>
+                </Grid.RowDefinitions>
+
+                <Button Style="{StaticResource TemplateButton}" Width="60" Height="37" 
+                        HorizontalAlignment="Left"
+                        Margin="20 0 0 0"
+                        Click="Button_Click_2">
+                    <StackPanel Orientation="Horizontal">
+                        <Image/>
+                        <TextBlock>Назад</TextBlock>
+                    </StackPanel>
+                </Button>
+                
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="230"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="{Binding Path}" Margin="30"/>
+
+                    <StackPanel Grid.Column="1">
+                        <uc:InputArea Value="{Binding SelectedProduct.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Description="Название"/>
+                        <uc:InputArea Value="{Binding SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Description="Цена"/>
+                        <uc:InputArea Value="{Binding SelectedProduct.ShortDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Description="Краткое описание"/>
+
+                        <Button Style="{StaticResource TemplateButton}"
+                    HorizontalAlignment="Left" Margin="10 20"
+                    FontSize="16"
+                    Padding="10"
+                    Height="60"
+                    Width="200"
+                    Command="{Binding UploadFileCommand}">Загрузить фото товара</Button>
+
+                        <TextBlock Text="{Binding Error}" Margin="20 40 0 0" FontSize="16" Foreground="#ed4e42"></TextBlock>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource BaseTextBlock}" FontSize="22" FontWeight="DemiBold">Описание</TextBlock>
+
+                    <Border Padding="20" Grid.Row="1" CornerRadius="10" Margin="20" BorderThickness="3" Background="#d1cbcb">
+                        <TextBox Text="{Binding SelectedProduct.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" TextWrapping="Wrap" Style="{StaticResource test}" VerticalAlignment="Stretch"/>
+                    </Border>
+                </Grid>
+                <Button Command="{Binding RedactProductCommand}"
+                        Click="Button_Click_3"
+                        Style="{StaticResource TemplateButton}"
+                    FontSize="16"
+                    Width="130" Height="60" Grid.Row="3">Обновить</Button>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

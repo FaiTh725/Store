@@ -17,10 +17,8 @@
     <None Remove="View\Images\Head\Nomalize.png" />
     <None Remove="View\Images\Head\Normalize.png" />
     <None Remove="View\Images\Head\product.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Files\" />
+    <None Remove="View\Images\refresh.png" />
+    <None Remove="View\Images\search.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +39,8 @@
     <Resource Include="View\Images\Head\Minimize.png" />
     <Resource Include="View\Images\Head\Normalize.png" />
     <Resource Include="View\Images\Head\product.png" />
+    <Resource Include="View\Images\refresh.png" />
+    <Resource Include="View\Images\search.png" />
   </ItemGroup>
 
 </Project>

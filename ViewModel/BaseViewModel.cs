@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -88,22 +89,51 @@ namespace Store.ViewModel
             }
         }
 
+        private string searchString = "Поиск по названию";
+        public string SearchString
+        {
+            get => searchString;
+            set
+            {
+                searchString = value;
+                OnPropertyChanged(nameof(SearchString));
+            }
+        }
+
+        private List<Product> products;
+        public List<Product> Products
+        {
+            get => products;
+            set
+            {
+                products = value;
+                OnPropertyChanged("Products");
+            }
+        }
+
+        private Product selectedProduct;
+        public Product SelectedProduct
+        {
+            get => selectedProduct;
+            set
+            {
+                selectedProduct = value;
+                OnPropertyChanged(nameof(SelectedProduct));
+            }
+        }
+
         private ImageFile imageFile;
 
-        private ProductRepository repository;
+        private ProductRepository repository = new();
 
         #endregion
 
         public BaseViewModel()
         {
-            repository = new();
-
+            products = repository.GetAll().ToList<Product>();
+            
             Path = DefaultPath;
-            /*imageFile = new ImageFile()
-            {
-                FileName = "Default",
-                ImageData = File.ReadAllBytes(Path[1..])
-            };*/
+            
         }
 
         private void ClearFields()
@@ -121,6 +151,78 @@ namespace Store.ViewModel
         }
 
         #region Commands
+        private RelayCommand redactProductCommand;
+        public RelayCommand RedactProductCommand
+        {
+            get
+            {
+                return redactProductCommand ?? new RelayCommand(async obj =>
+                {
+                    var response = await repository.Update(SelectedProduct);
+
+                    if(response == true)
+                    {
+                        Products = repository.GetAll();
+                    }
+                });
+            }
+        }
+
+        private RelayCommand refreshCommand;
+        public RelayCommand RefreshComamnd
+        {
+            get
+            {
+                return refreshCommand ?? new RelayCommand(obj =>
+                {
+                    SearchString = "Поиск по названию";
+                    Products = repository.GetAll();
+                });
+            }
+        }
+
+        private RelayCommand searchCommand;
+        public RelayCommand SearchCommand
+        {
+            get
+            {
+                return searchCommand ?? new RelayCommand(async obj =>
+                {
+                    if(SearchString == string.Empty)
+                    {
+                        Products = repository.GetAll();
+                    }
+
+                    if(SearchString != "Поиск по названию")
+                    {
+                        var res = await repository.GetByName(SearchString);
+
+                        Products = res.ToList();
+                    }
+                });
+            }
+        }
+
+        private RelayCommand deleteteProductCommand;
+        public RelayCommand DeleteteProductCommand
+        {
+            get
+            {
+                return deleteteProductCommand ?? new RelayCommand(async obj =>
+                {
+                    if(SelectedProduct != null)
+                    {
+                        var response = await repository.Delete(SelectedProduct);
+
+                        if(response)
+                        {
+                            Products = repository.GetAll();
+                        }
+                    }
+                });
+            }
+        }
+
         private RelayCommand uploadFileCommand;
         public RelayCommand UploadFileCommand
         {
@@ -197,6 +299,8 @@ namespace Store.ViewModel
                             FileName = "Default",
                             ImageData = await repository.GetDefaultImage()
                         };
+
+                        Products = repository.GetAll();
                     }
                 });
             }
