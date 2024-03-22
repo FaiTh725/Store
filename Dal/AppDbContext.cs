@@ -29,7 +29,7 @@ namespace Store.Dal
             var json = File.ReadAllText(jsonName);
 
             AppConfig appConfig = JsonConvert.DeserializeObject<AppConfig>(json);
-            optionsBuilder.UseSqlite("Data Source = ProductStore.db");
+            optionsBuilder.UseSqlite(appConfig.ConnectionString);
             //optionsBuilder.UseSqlServer(appConfig.ConnectionString);
             //optionsBuilder.UseSqlServer("Server=FaiTh;Database=ProductStore;Trusted_Connection=True;TrustServerCertificate=True");
         }
